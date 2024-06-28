@@ -57,26 +57,22 @@ def get_gpt2_embeddings(text):
     
     return mean_embedding
 
-# Funzione per rispondere a una domanda utilizzando il modello di QA BERT
 def answer_question(question, context):
-    # Codifica la domanda e il contesto in input IDs utilizzando il tokenizer BERT
-    # Ottiene gli input IDs sotto forma di lista
     inputs = qa_tokenizer.encode_plus(question, context, add_special_tokens=True, return_tensors="pt").to(device)
     input_ids = inputs["input_ids"].tolist()[0]
+    # print(f"input_ids: {input_ids}")
     
-    # Disabilita il calcolo del gradiente durante l'ottenimento delle previsioni
     with torch.no_grad():
-        # Ottiene gli output del modello, inclusi i punteggi per l'inizio e la fine della risposta
         outputs = qa_model(**inputs)
+        # print(f"Outputs: {outputs}")
         answer_start_scores = outputs.start_logits
         answer_end_scores = outputs.end_logits
-    
-    # Trova l'indice dell'inizio della risposta con il punteggio più alto
-    # Trova l'indice della fine della risposta con il punteggio più alto e aggiunge 1
-    # Converte gli IDs dei token della risposta in stringa
+        
     answer_start = torch.argmax(answer_start_scores)
     answer_end = torch.argmax(answer_end_scores) + 1
-    answer = qa_tokenizer.convert_tokens_to_string(qa_tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+    tokens = qa_tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end])
+    # print(f"Tokens: {tokens}")
+    answer = qa_tokenizer.convert_tokens_to_string(tokens)
     
     return answer
 
@@ -94,8 +90,8 @@ question = "Who is Mario's wife?"
 question = "Which company Simone is working for?"
 
 # Ottenere gli embeddings GPT-2 del contesto (non necessario per il modello di QA, ma mostrato come esempio)
-gpt2_embedding = get_gpt2_embeddings(context)
-print(f"GPT-2 Embedding: {gpt2_embedding}")
+# gpt2_embedding = get_gpt2_embeddings(context)
+# print(f"GPT-2 Embedding: {gpt2_embedding}")
 
 # Rispondere alla domanda usando il modello di QA
 answer = answer_question(question, context)
