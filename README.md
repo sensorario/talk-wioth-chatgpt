@@ -16,5 +16,5 @@ pip install -r requirements.txt
 ## Esecuzione programma
 
 ```
-python3 prova.py`
+python3 prova.py
 ```
