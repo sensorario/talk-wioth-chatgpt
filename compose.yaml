@@ -1,0 +1,22 @@
+services:
+  postgres:
+    build:
+      context: ./docker/postgresql
+    container_name: mio-container-postgresql
+    # restart: "always"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: vectordb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+
+volumes:
+  postgres_data:
+
+networks:
+  postgres_network:

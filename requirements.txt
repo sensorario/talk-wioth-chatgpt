@@ -1,3 +1,4 @@
 torch
 transformers
 psycopg2-binary
+pgvector

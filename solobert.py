@@ -9,6 +9,31 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 import torch
 from transformers import logging, BertTokenizer, BertForQuestionAnswering
 
+import psycopg2
+from pgvector.psycopg2 import register_vector
+from psycopg2.extras import execute_values
+
+# Creazione della connessione
+conn = psycopg2.connect(
+    dbname="vectordb",
+    user="postgres",
+    password="testpassword",
+    host="localhost",
+    port="5432"
+)
+
+# Creazione di un cursore per eseguire le query
+cur = conn.cursor()
+
+# Esecuzione di una query di esempio
+cur.execute("SELECT version();")
+db_version = cur.fetchone()
+print(f"Database version: {db_version}")
+
+# Chiusura del cursore e della connessione
+cur.close()
+conn.close()
+
 # Nascondo i log un po' troppo verbosi
 logging.set_verbosity_error()
 
