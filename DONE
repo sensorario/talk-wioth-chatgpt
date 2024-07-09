@@ -1,0 +1,15 @@
+# DONE
+
+## DB Vettoriale
+
+I dati vengono salvati in un database vettoriale Postgresql.
+
+## Embedding
+
+L'embedding è il processo mediante il quale un contenuto viene rappresentato come un vettore numerico in uno spazio multidimensionale. Questo vettore cattura il significato semantico e sintattico del testo, facilitando l'elaborazione automatica del linguaggio naturale (NLP) da parte dei modelli di intelligenza artificiale.
+
+- Preparazione del modello BERT;
+- tokenizzazione del testo;
+- elaborazione e comprensione significato;
+- calcolo del numero che rappresenta il significato;
+- utilizzo dele numero per ritrovare la frase.

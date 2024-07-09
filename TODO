@@ -1,9 +1,7 @@
 # TODO
 
-- db vettoriale per tirare su i contenuti embeddati
 - PDF... ThoughtWorks?
-- come si fa embedding?
-- interrogare passando dal db vettoriale
+
 - con openai come velocizzo/faccio embedding ... ?
   - serve la gpu per passare dal
   - vantaggi svantaggi locale/remoto ?
