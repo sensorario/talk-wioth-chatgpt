@@ -1,8 +1,10 @@
 stop:
+	docker compose down
 	docker compose stop postgres
+	docker rmi dddemo3-postgres
 
 rm:
-	rm -rf postgres_data/**
+	rm -rf pgdata/**
 	docker compose rm postgres --force
 	docker volume ls -qf dangling=true | xargs -r docker volume rm
 
