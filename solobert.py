@@ -53,26 +53,27 @@ CREATE TABLE IF NOT EXISTS embeddings (
     text TEXT,
     embedding VECTOR(768)  -- Dimensione dell'embedding BERT
 );
-DELETE FROM embeddings;
+-- DELETE FROM embeddings;
 """)
 conn.commit()
 
-# Salvataggio degli embedding nel database
-def save_embeddings(texts):
-    embeddings = [get_embeddings(text) for text in texts]
-    data = [(text, embedding) for text, embedding in zip(texts, embeddings)]
-    execute_values(cur, "INSERT INTO embeddings (text, embedding) VALUES %s", data)
-    conn.commit()
+# # Salvataggio degli embedding nel database
+# def save_embeddings(texts):
+#     embeddings = [get_embeddings(text) for text in texts]
+#     data = [(text, embedding) for text, embedding in zip(texts, embeddings)]
+#     execute_values(cur, "INSERT INTO embeddings (text, embedding) VALUES %s", data)
+#     conn.commit()
 
-# Esempio di frasi da salvare nel database
-texts = [
-    "Simone is 42 years old.",
-    "Simone eyes are brown colored.",
-    "Simone have two legs!",
-    "Mario have three arms.",
-]
+# # Esempio di frasi da salvare nel database
+# texts = [
+#     "Simone is 42 years old.",
+#     "Simone eyes are brown colored.",
+#     "Simone have two legs!",
+#     "Mario have three arms.",
+#     "Camilla is 7 years old and Alessandro is 9 years old",
+# ]
 
-save_embeddings(texts)
+# save_embeddings(texts)
 
 def answer_question(question, context):
     # encode_plus codifica insieme domanda e contesto
@@ -107,6 +108,8 @@ question = "How old is Simone?"
 question = "Which is the colour of Simone's eyes?"
 question = "How many legs have Simone?"
 question = "How many arms have Mario?"
+question = "How old is Alessandro?"
+question = "How old is Camilla?"
 
 # Rispondere alla domanda usando il modello di QA e il database
 answer = answer_question_with_db(question)
