@@ -135,6 +135,7 @@ question = "How many legs have Simone?"
 question = "How many arms have Mario?"
 question = "How old is Camilla?"
 question = "How old is Alessandro?"
+question = "What is the name of an amazing tool?"
 
 # Rispondere alla domanda usando il modello di QA e il database
 answer = answer_question_with_db(question)
