@@ -2,3 +2,7 @@ torch
 transformers
 psycopg2-binary
 pgvector
+pypdf
+frontend
+fitz
+pymupdf
