@@ -14,8 +14,6 @@ WORKDIR /tmp/pgvector
 RUN make
 RUN make install
 
-
-
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=testpassword
 ENV POSTGRES_DB=vectordb
@@ -23,7 +21,6 @@ ENV PGUSER=postgres
 
 EXPOSE 5432
 
-# CMD ["postgres", "-c", "config_file=/var/lib/postgresql/data/pg_hba.conf"]
 CMD ["-c", "config_file=/var/lib/postgresql/data/postgresql.conf"]
 
 
