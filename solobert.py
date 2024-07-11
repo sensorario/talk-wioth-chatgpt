@@ -1,13 +1,15 @@
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
-warnings.filterwarnings("ignore", category=FutureWarning)
-
+import fitz 
+import os
 import torch
 from transformers import logging, BertTokenizer, BertForQuestionAnswering, BertModel
 import psycopg2
 from pgvector.psycopg2 import register_vector
 from psycopg2.extras import execute_values
 import numpy as np
+
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 # Nascondo i log un po' troppo verbosi
 logging.set_verbosity_error()
@@ -53,27 +55,50 @@ CREATE TABLE IF NOT EXISTS embeddings (
     text TEXT,
     embedding VECTOR(768)  -- Dimensione dell'embedding BERT
 );
--- DELETE FROM embeddings;
+DELETE FROM embeddings;
 """)
 conn.commit()
 
-# # Salvataggio degli embedding nel database
-# def save_embeddings(texts):
-#     embeddings = [get_embeddings(text) for text in texts]
-#     data = [(text, embedding) for text, embedding in zip(texts, embeddings)]
-#     execute_values(cur, "INSERT INTO embeddings (text, embedding) VALUES %s", data)
-#     conn.commit()
+# Salvataggio degli embedding nel database
+def save_embeddings(texts):
+    # print('save_embeddings says: ' + texts)
+    if isinstance(texts, str):
+        texts = [texts]
+    embeddings = [get_embeddings(text) for text in texts]
+    data = [(text, embedding) for text, embedding in zip(texts, embeddings)]
+    execute_values(cur, "INSERT INTO embeddings (text, embedding) VALUES %s", data)
+    conn.commit()
 
-# # Esempio di frasi da salvare nel database
+# Esempio di frasi da salvare nel database
 # texts = [
-#     "Simone is 42 years old.",
-#     "Simone eyes are brown colored.",
-#     "Simone have two legs!",
-#     "Mario have three arms.",
-#     "Camilla is 7 years old and Alessandro is 9 years old",
+#      "Simone is 42 years old.",
+#      "Simone eyes are brown colored.",
+#      "Simone have two legs!",
+#      "Mario have three arms.",
+#      "Camilla is 7 years old and Alessandro is 9 years old",
 # ]
-
 # save_embeddings(texts)
+
+
+def transform_string_to_list(text):
+    # Split the text by newlines and strip whitespace from each line
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    return lines
+
+path = os.path.abspath(os.getcwd())
+fullpath = path + '/prova.pdf'
+doc = fitz.open(fullpath) 
+testo = ""
+for page in doc: 
+   testo += page.get_text()
+   newtesto = testo.replace("\n", " ").replace("\r", "").strip()
+   struttura = newtesto.split()
+#    print('>>>' + testo)ß
+   save_embeddings(transform_string_to_list(testo))
+         
+
+# print("TESTI: <<<" + newtesto + " >>>")
+
 
 def answer_question(question, context):
     # encode_plus codifica insieme domanda e contesto
@@ -108,8 +133,8 @@ question = "How old is Simone?"
 question = "Which is the colour of Simone's eyes?"
 question = "How many legs have Simone?"
 question = "How many arms have Mario?"
-question = "How old is Alessandro?"
 question = "How old is Camilla?"
+question = "How old is Alessandro?"
 
 # Rispondere alla domanda usando il modello di QA e il database
 answer = answer_question_with_db(question)
