@@ -18,3 +18,9 @@ run:
 
 bash:
 	docker exec -it mio-container-postgresql bash
+
+init:
+	python3 -m venv venv && source venv/bin/activate
+
+install:
+		pip install -r requirements.txt
